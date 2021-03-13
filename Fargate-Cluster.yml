@@ -15,7 +15,7 @@ Resources:
   Cluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'Cluster']]
+      ClusterName: !Join ['-', [!Ref Stage , 'Cluster']]
 
   # Create a VPC
   VPC:
@@ -85,7 +85,7 @@ Resources:
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'ExecutionRole']]
+      RoleName: !Join ['-', [!Ref Stage , 'ExecutionRole']]
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
@@ -107,7 +107,7 @@ Resources:
       TaskRoleArn: !Ref ExecutionRole
       ExecutionRoleArn: !Ref ExecutionRole
       ContainerDefinitions:
-        - Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'Container']]
+        - Name: !Join ['-', [!Ref Stage , 'Container']]
           Image: !Ref ImageURI
           PortMappings:
             - ContainerPort: !Ref ContainerPort
@@ -129,7 +129,7 @@ Resources:
   ContainerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'ContainerSecurityGroup']]
+      GroupDescription: !Join ['-', [!Ref Stage , 'ContainerSecurityGroup']]
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -142,7 +142,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties: 
       IpAddressType: ipv4
-      Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'LoadBalancer']]
+      Name: !Join ['-', [!Ref Stage , 'LoadBalancer']]
       Scheme: internet-facing
       SecurityGroups:
         - !Ref LoadBalancerSecurityGroup
@@ -155,7 +155,7 @@ Resources:
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'TargetGroup']]
+      Name: !Join ['-', [!Ref Stage , 'TargetGroup']]
       Port: 80
       Protocol: HTTP
       TargetType: ip
@@ -177,7 +177,7 @@ Resources:
     Type: AWS::ECS::Service
     DependsOn: LoadBalancerListener
     Properties:
-      ServiceName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'ECSService']]
+      ServiceName: !Join ['-', [!Ref Stage , 'ECSService']]
       Cluster: !Ref Cluster
       TaskDefinition: !Ref TaskDefinition
       DesiredCount: 2
@@ -191,6 +191,6 @@ Resources:
           SecurityGroups:
             - !Ref ContainerSecurityGroup
       LoadBalancers:
-        - ContainerName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'Container']]
+        - ContainerName: !Join ['-', [!Ref Stage , 'Container']]
           ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref TargetGroup
