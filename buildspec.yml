@@ -24,9 +24,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push $ECR_REPOSITORY_URI:latest
       - docker push $ECR_REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"order-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json
+      - printf '{"ImageURI":"%s:%s"}' $ECR_REPOSITORY_URI $IMAGE_TAG > imageDetail.json
 artifacts:
   files:
-    - imagedefinitions.json
-    - target/order-service.jar
+    - imageDetail.json
