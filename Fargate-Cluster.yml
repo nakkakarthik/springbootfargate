@@ -117,7 +117,7 @@ Resources:
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'LoadBalancerSecurityGroup']]
+      GroupDescription: !Join ['-', [!Ref Stage , 'LoadBalancerSecurityGroup']]
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
